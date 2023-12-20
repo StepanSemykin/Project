@@ -57,5 +57,3 @@ def get_info(url: str, index: int) -> list:
 
 if __name__ == "__main__":
     data = extract_data('samsung', 15, 'popular')
-    print(data)
-    print(len(data))
