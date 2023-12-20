@@ -46,8 +46,8 @@ def get_info(url: str, index: int) -> list:
         current_price = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'price-block__final-price')))
 
-        res = (product_name.text, id, rating.text,
-               number_ratings.text, old_price.text, current_price.text)
+        res = [product_name.text, id, rating.text,
+               number_ratings.text, old_price.text, current_price.text]
     except Exception as err:
         print(err)
     finally:
@@ -57,3 +57,5 @@ def get_info(url: str, index: int) -> list:
 
 if __name__ == "__main__":
     data = extract_data('samsung', 15, 'popular')
+    print(data)
+    print(len(data))
