@@ -3,7 +3,11 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QApplication, QLabel, QComboBox,
                              QMainWindow, QPushButton,
-                             QWidget, QLineEdit)
+                             QWidget, QLineEdit, QMessageBox)
+from WBparser import extract_data
+
+SORT_METHODS = {0: 'popular', 1: 'rate', 2: 'priceup',
+                3: 'pricedown', 4: 'newly', 5: 'benefit'}
 
 
 class GraphicalInterface(QMainWindow):
@@ -52,7 +56,21 @@ class GraphicalInterface(QMainWindow):
 
         self.start_parser = QPushButton('НАЧАТЬ', self.central_widget)
         self.start_parser.setToolTip('Начинает загрузку товаров с сайта')
-        self.start_parser.setGeometry(175, 350, 100, 30)
+        self.start_parser.setGeometry(175, 350, 100, 40)
+        self.start_parser.clicked.connect(self.start_program)
+
+    def is_fill(self) -> bool:
+        name = self.name_input.text().strip()
+        quantity = self.quantity_input.text().strip()
+        return True if name and quantity else False
+
+    def start_program(self) -> None:
+        if self.is_fill():
+            pass
+        else:
+            QMessageBox.warning(self, 'Предупреждение',
+                                'Пожалуйста, заполните все поля')
+            # print(self.sort_input.currentIndex())
 
 
 if __name__ == "__main__":
