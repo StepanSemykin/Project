@@ -6,9 +6,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 URL = 'https://www.wildberries.ru/catalog/0/search.aspx?page=1&sort=%s&search=%s'
 
+def get_valid_url(search_name: str, sort: str) -> str:
+    search_name = search_name.replace(' ', '+')
+    return URL % (sort, search_name)
+
 
 def extract_data(search_name: str, quantity: int, sort: str) -> list:
-    url = URL % (sort, search_name)
+    url = get_valid_url(search_name, sort)
     args = [(url, i) for i in range(quantity)]
     results_list = []
     with mp.Pool(processes=mp.cpu_count()) as p:
@@ -56,4 +60,5 @@ def get_info(url: str, index: int) -> list:
 
 
 if __name__ == "__main__":
-    data = extract_data('samsung', 15, 'popular')
+    data = extract_data('Samsung s20', 15, 'popular')
+    print(data)
