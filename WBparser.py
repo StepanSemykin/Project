@@ -89,4 +89,5 @@ def get_info(url: str, index: int) -> list:
 
 
 if __name__ == "__main__":
-    data = extract_data('Samsung s20', 20, 'popular')
+    data = extract_data('Iphone 12', 25, 'popular')
+    print(data)
