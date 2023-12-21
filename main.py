@@ -1,13 +1,16 @@
+import os
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QApplication, QLabel, QComboBox,
-                             QMainWindow, QPushButton,
+                             QMainWindow, QPushButton, QFileDialog,
                              QWidget, QLineEdit, QMessageBox)
 from WBparser import extract_data
+from save import serialize_data, convert_to_excel
 
 SORT_METHODS = {0: 'popular', 1: 'rate', 2: 'priceup',
                 3: 'pricedown', 4: 'newly', 5: 'benefit'}
+DEFAULT_PATH = '.\\Files\\result.json'
 
 
 class GraphicalInterface(QMainWindow):
@@ -59,18 +62,39 @@ class GraphicalInterface(QMainWindow):
         self.start_parser.setGeometry(175, 350, 100, 40)
         self.start_parser.clicked.connect(self.start_program)
 
-    def is_fill(self) -> bool:
-        name = self.name_input.text().strip()
-        quantity = self.quantity_input.text().strip()
+    def is_fill(self, name: str, quantity: str) -> bool:
         return True if name and quantity else False
 
     def start_program(self) -> None:
-        if self.is_fill():
-            pass
+        name = self.name_input.text().strip()
+        quantity = self.quantity_input.text().strip()
+        sort = self.sort_input.currentIndex()
+        if self.is_fill(name, quantity):
+            self.data = extract_data(name, int(quantity), sort)
+            serialize_data(self.data, DEFAULT_PATH)
+            self.reply = QMessageBox.question(self, 'Сохранение в Excel', 
+                                              'Хотите ли сохранить результат в Excel?',
+                                              QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if self.reply == QMessageBox.Yes:
+                self.save_data_to_excel()
+            else:
+                QMessageBox.information(
+                    self, 'Отмена', 'Данные не будут сохранены в Excel.')
         else:
             QMessageBox.warning(self, 'Предупреждение',
                                 'Пожалуйста, заполните все поля')
-            # print(self.sort_input.currentIndex())
+
+    def save_data_to_excel(self):
+        self.file_name = QFileDialog.getExistingDirectory(
+            self, 'Выбрать папку для сохранения', '')
+        if self.file_name:
+            save_path = os.path.join(self.file_name, 'result.xlsx')
+            convert_to_excel(DEFAULT_PATH, save_path)
+            QMessageBox.information(
+                self, 'Успешно', 'Данные успешно сохранены в Excel.')
+        else:
+            QMessageBox.warning(
+                self, 'Ошибка', 'Папка для сохранения не выбрана. Данные не будут сохранены в Excel.')
 
 
 if __name__ == "__main__":
