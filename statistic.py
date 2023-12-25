@@ -5,6 +5,7 @@ from save import deserialize_data
 
 DEFAULT_PATH = '.\\Files\\result.json'
 
+
 def draw_statistic():
     data = deserialize_data(DEFAULT_PATH)
     df = pd.DataFrame(data)
