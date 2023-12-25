@@ -1,6 +1,7 @@
 import multiprocessing as mp
-import time
 import random
+import time
+from fake_useragent import UserAgent
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
@@ -9,13 +10,24 @@ from selenium.webdriver.support.ui import WebDriverWait
 URL = 'https://www.wildberries.ru/catalog/0/search.aspx?page=%d&sort=%s&search=%s'
 PRODUCTS_PER_LOADED_PAGE = 100
 PRODUCTS_PER_PAGE = 30
+# PROXY = 'http://0d77b9017b62652a209b200b2ed39b990414da92:@proxy.zenrows.com:8001'
 
 
 def get_info(valid_url: str) -> list:
     chrome_options = webdriver.ChromeOptions()
+
+    user_agent = UserAgent().chrome
+    chrome_options.add_argument(f'--user-agent={user_agent}')
+    # proxy_options = {
+    # 'proxy': {
+    #     'http': f'{PROXY}',
+    #     'https': f'{PROXY}',
+    #     'verify_ssl': False,
+    # },}
+
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--headless')
-
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     driver = webdriver.Chrome(options=chrome_options)
     driver.set_page_load_timeout(20)
 
@@ -38,11 +50,11 @@ def get_info(valid_url: str) -> list:
 
         res = [product_name.text, id, rating.text,
                number_ratings.text, old_price.text, current_price.text]
-
     except Exception as err:
         print(err)
         driver.quit()
         return [None, valid_url]
+    
     driver.quit()
     return res
 
@@ -54,8 +66,19 @@ def get_valid_url(search_name: str, sort: str, page: int) -> str:
 
 def get_links(quantity: int, valid_url: str):
     chrome_options = webdriver.ChromeOptions()
+    
+    user_agent = UserAgent().chrome
+    chrome_options.add_argument(f'--user-agent={user_agent}')
+    # proxy_options = {
+    # 'proxy': {
+    #     'http': f'{PROXY}',
+    #     'https': f'{PROXY}',
+    #     'verify_ssl': False,
+    # },}
+
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--headless')
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     driver = webdriver.Chrome(options=chrome_options)
     driver.set_page_load_timeout(20)
 
@@ -109,6 +132,7 @@ def get_links(quantity: int, valid_url: str):
         print(err)
         driver.quit()
         return [None]
+    
     time.sleep(random.randrange(1, 15))
     driver.quit()
     return links
@@ -130,4 +154,4 @@ def extract_data(search_name: str, sort: str, quantity: int) -> list:
 
 
 if __name__ == "__main__":
-    data = extract_data('Iphone 12', 'popular', 134)   
+    data = extract_data('Iphone 12', 'popular', 134) 

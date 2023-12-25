@@ -1,6 +1,5 @@
 import json
 import pandas as pd
-from WBparser import extract_data
 
 
 def to_int(string: str) -> int:
