@@ -10,21 +10,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 URL = 'https://www.wildberries.ru/catalog/0/search.aspx?page=%d&sort=%s&search=%s'
 PRODUCTS_PER_LOADED_PAGE = 100
 PRODUCTS_PER_PAGE = 30
-# PROXY = 'http://0d77b9017b62652a209b200b2ed39b990414da92:@proxy.zenrows.com:8001'
 
 
 def get_info(valid_url: str) -> list:
     chrome_options = webdriver.ChromeOptions()
-
     user_agent = UserAgent().chrome
     chrome_options.add_argument(f'--user-agent={user_agent}')
-    # proxy_options = {
-    # 'proxy': {
-    #     'http': f'{PROXY}',
-    #     'https': f'{PROXY}',
-    #     'verify_ssl': False,
-    # },}
-
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--headless')
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -66,16 +57,8 @@ def get_valid_url(search_name: str, sort: str, page: int) -> str:
 
 def get_links(quantity: int, valid_url: str):
     chrome_options = webdriver.ChromeOptions()
-    
     user_agent = UserAgent().chrome
     chrome_options.add_argument(f'--user-agent={user_agent}')
-    # proxy_options = {
-    # 'proxy': {
-    #     'http': f'{PROXY}',
-    #     'https': f'{PROXY}',
-    #     'verify_ssl': False,
-    # },}
-
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--headless')
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
