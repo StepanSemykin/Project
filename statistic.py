@@ -6,7 +6,7 @@ from save import deserialize_data
 DEFAULT_PATH = '.\\Files\\result.json'
 
 
-def draw_statistic():
+def draw_graphs():
     data = deserialize_data(DEFAULT_PATH)
     df = pd.DataFrame(data)
 
@@ -59,4 +59,4 @@ def draw_statistic():
 
 
 if __name__ == '__main__':
-    draw_statistic()
+    draw_graphs()
