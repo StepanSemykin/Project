@@ -1,7 +1,5 @@
 import os
 import sys
-from matplotlib import pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QApplication, QLabel, QComboBox,
