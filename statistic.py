@@ -6,19 +6,18 @@ from save import deserialize_data
 DEFAULT_PATH = '.\\Files\\result.json'
 
 
-def draw_graphs():
+def draw_graphs() -> None:
     data = deserialize_data(DEFAULT_PATH)
     df = pd.DataFrame(data)
 
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 
-    high, bin_edges, intervals = axes[0, 0].hist(
-        df['Текущая цена'], edgecolor='black', color="green", alpha=0.8)
+    high, bin_edges, intervals = axes[0, 0].hist(df['Текущая цена'], edgecolor='black', color='green', alpha=0.8)
     plt.subplot(2, 2, 1)
     plt.xticks(bin_edges)
     plt.gca().xaxis.set_major_formatter('{:.0f}'.format)
-    plt.xlabel("Цена")
-    plt.ylabel("Количество товаров")
+    plt.xlabel('Цена')
+    plt.ylabel('Количество товаров')
     plt.title('Гистограмма цен на товары')
 
     mean_price = int(np.mean(df['Текущая цена']))

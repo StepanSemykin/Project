@@ -16,7 +16,7 @@ PRODUCTS_PER_LOADED_PAGE = 100
 PRODUCTS_PER_PAGE = 30
 
 
-def resource_path(relative_path):
+def resource_path(relative_path: str) -> str:
     try:
         base_path = sys._MEIPASS
     except Exception:
@@ -30,7 +30,7 @@ def get_info(valid_url: str) -> list:
     chrome_options.add_argument(f'--user-agent={user_agent}')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--headless')
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
     service = Service(executable_path=resource_path(PATH_DRIVER))
     driver = webdriver.Chrome(options=chrome_options, service=service)
     driver.set_page_load_timeout(20)
@@ -68,13 +68,13 @@ def get_valid_url(search_name: str, sort: str, page: int) -> str:
     return URL % (page, sort, search_name)
 
 
-def get_links(quantity: int, valid_url: str):
+def get_links(quantity: int, valid_url: str) -> None:
     chrome_options = webdriver.ChromeOptions()
     user_agent = UserAgent().chrome
     chrome_options.add_argument(f'--user-agent={user_agent}')
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--headless')
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
     service = Service(executable_path=resource_path(PATH_DRIVER))
     driver = webdriver.Chrome(options=chrome_options, service=service)
     driver.set_page_load_timeout(20)
