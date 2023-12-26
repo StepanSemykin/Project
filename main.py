@@ -1,3 +1,4 @@
+import multiprocessing as mp
 import os
 import sys
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
@@ -124,6 +125,7 @@ class FileWritingThread(QThread):
 
 
 if __name__ == "__main__":
+    mp.freeze_support()
     app = QApplication(sys.argv)
     w = GraphicalInterface()
     w.show()
