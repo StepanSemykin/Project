@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -5,8 +6,11 @@ from save import deserialize_data
 
 DEFAULT_PATH = '.\\Files\\result.json'
 
+formatter = '[%(asctime)s: %(levelname)s] %(message)s'
+logging.basicConfig(level=logging.INFO, filename="statistic.log", filemode="w", format=formatter)
 
 def draw_graphs() -> None:
+    logging.info('Start draw (statistic.py)')
     data = deserialize_data(DEFAULT_PATH)
     df = pd.DataFrame(data)
 
@@ -54,8 +58,6 @@ def draw_graphs() -> None:
     plt.ylabel('Цена')
     plt.title('Зависимость рейтинга товара от его цены')
 
+    logging.info('Show graph (statistic.py)')
     plt.show()
-
-
-if __name__ == '__main__':
-    draw_graphs()
+    logging.info('End draw (statistic.py)')

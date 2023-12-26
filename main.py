@@ -1,7 +1,8 @@
+import logging
 import multiprocessing as mp
 import os
 import sys
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QApplication, QLabel, QComboBox,
                              QMainWindow, QPushButton, QFileDialog,
@@ -12,7 +13,11 @@ from statistic import draw_graphs
 
 SORT_METHODS = {0: 'popular', 1: 'rate', 2: 'priceup',
                 3: 'pricedown', 4: 'newly', 5: 'benefit'}
-DEFAULT_PATH = '.\\Files\\result.json'
+DEFAULT_PATH = 'Files\\result.json'
+
+formatter = '[%(asctime)s: %(levelname)s] %(message)s'
+logging.basicConfig(level=logging.INFO, filename="main.log",
+                    filemode="w", format=formatter)
 
 
 class GraphicalInterface(QMainWindow):
@@ -71,16 +76,17 @@ class GraphicalInterface(QMainWindow):
         return True if name and quantity else False
 
     def start_program(self) -> None:
+        logging.info('Start programm (main.py)')
         name = self.name_input.text().strip()
         quantity = self.quantity_input.text().strip()
         sort = self.sort_input.currentIndex()
         if self.is_fill(name, quantity):
+            logging.info('Is fill')
             self.data = extract_data(name,  sort, int(quantity))
             serialize_data(self.data, DEFAULT_PATH)
-            self.workerThread = FileWritingThread(self.data, DEFAULT_PATH)
-            self.workerThread.start()
             self.save_data_to_excel()
             self.output_statistic()
+            logging.info('End programm (main.py)')
         else:
             QMessageBox.warning(self, 'Warning',
                                 'Пожалуйста, заполните все поля')
@@ -109,19 +115,6 @@ class GraphicalInterface(QMainWindow):
     def output_statistic(self) -> None:
         if self.output_graphs_question():
             draw_graphs()
-
-
-class FileWritingThread(QThread):
-    finished = pyqtSignal()
-
-    def __init__(self, data: list, path: str) -> None:
-        super().__init__()
-        self.data = data
-        self.path = path
-
-    def run(self) -> None:
-        serialize_data(self.data, self.path)
-        self.finished.emit()
 
 
 if __name__ == "__main__":
