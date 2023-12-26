@@ -73,39 +73,39 @@ def get_links(quantity: int, valid_url: str):
         if quantity > 30:
             height = driver.execute_script("return document.body.scrollHeight")
             if 30 < quantity <= 45:
-                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  # 45
+                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  
                 time.sleep(time_)
             elif 45 < quantity <= 60:
-                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  # 45
+                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 0.9});")  # 60
+                driver.execute_script(f"window.scrollTo(0, {height * 0.9});")  
                 time.sleep(time_)
             elif 60 < quantity <= 75:
-                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  # 45
+                driver.execute_script(f"window.scrollTo(0, {height * 0.5});") 
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 0.9});")  # 60
+                driver.execute_script(f"window.scrollTo(0, {height * 0.9});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 1.3});")  # 75
+                driver.execute_script(f"window.scrollTo(0, {height * 1.3});")  
                 time.sleep(time_)
             elif 75 < quantity <= 90:
-                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  # 45
+                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 0.9});")  # 60
+                driver.execute_script(f"window.scrollTo(0, {height * 0.9});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 1.3});")  # 75
+                driver.execute_script(f"window.scrollTo(0, {height * 1.3});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 1.7});")  # 90
+                driver.execute_script(f"window.scrollTo(0, {height * 1.7});")  
                 time.sleep(time_)
             else:
-                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  # 45
+                driver.execute_script(f"window.scrollTo(0, {height * 0.5});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 0.9});")  # 60
+                driver.execute_script(f"window.scrollTo(0, {height * 0.9});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 1.3});")  # 75
+                driver.execute_script(f"window.scrollTo(0, {height * 1.3});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 1.7});")  # 90
+                driver.execute_script(f"window.scrollTo(0, {height * 1.7});")  
                 time.sleep(time_)
-                driver.execute_script(f"window.scrollTo(0, {height * 2.1});")  # 100
+                driver.execute_script(f"window.scrollTo(0, {height * 2.1});")  
                 time.sleep(time_)
 
         goods = WebDriverWait(driver, 20).until(
