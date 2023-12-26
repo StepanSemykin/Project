@@ -109,7 +109,7 @@ class GraphicalInterface(QMainWindow):
     def output_statistic(self) -> None:
         if self.output_graphs_question():
             draw_graphs()
-                    
+
 
 class FileWritingThread(QThread):
     finished = pyqtSignal()

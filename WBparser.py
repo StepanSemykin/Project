@@ -1,15 +1,27 @@
 import multiprocessing as mp
+import os
 import random
+import sys
 import time
 from fake_useragent import UserAgent
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 
+PATH_DRIVER = './chromedriver-win64/chromedriver.exe'
 URL = 'https://www.wildberries.ru/catalog/0/search.aspx?page=%d&sort=%s&search=%s'
 PRODUCTS_PER_LOADED_PAGE = 100
 PRODUCTS_PER_PAGE = 30
+
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
 
 
 def get_info(valid_url: str) -> list:
@@ -19,7 +31,8 @@ def get_info(valid_url: str) -> list:
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--headless')
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    driver = webdriver.Chrome(options=chrome_options)
+    service = Service(executable_path=resource_path(PATH_DRIVER))
+    driver = webdriver.Chrome(options=chrome_options, service=service)
     driver.set_page_load_timeout(20)
 
     try:
@@ -62,7 +75,8 @@ def get_links(quantity: int, valid_url: str):
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument('--headless')
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    driver = webdriver.Chrome(options=chrome_options)
+    service = Service(executable_path=resource_path(PATH_DRIVER))
+    driver = webdriver.Chrome(options=chrome_options, service=service)
     driver.set_page_load_timeout(20)
 
     try:
@@ -122,19 +136,26 @@ def get_links(quantity: int, valid_url: str):
 
 
 def extract_data(search_name: str, sort: str, quantity: int) -> list:
+    # mp.freeze_support()
     args = [(PRODUCTS_PER_LOADED_PAGE, get_valid_url(search_name, sort, i+1)) for i in range(quantity // PRODUCTS_PER_LOADED_PAGE)]
     if quantity % PRODUCTS_PER_LOADED_PAGE != 0:
         args.append((quantity % PRODUCTS_PER_LOADED_PAGE, get_valid_url(search_name, sort, len(args)+1)))
 
-    with mp.Pool(processes=mp.cpu_count()) as p:
-        result = p.starmap(get_links, args)
+    try:
+        with mp.Pool(processes=mp.cpu_count()) as p:
+            result = p.starmap(get_links, args)
+    except Exception as err:
+        print(err)        
         
     new_args = [i for sublist in result for i in sublist]
-    with mp.Pool(processes=mp.cpu_count()) as p:
-        new_result = p.map(get_info, new_args)
-
+    try:
+        with mp.Pool(processes=mp.cpu_count()) as p:
+            new_result = p.map(get_info, new_args)
+    except Exception as err:
+        print(err)
+        
     return new_result
 
 
 if __name__ == "__main__":
-    data = extract_data('Iphone 12', 'popular', 134) 
+    data = extract_data('Iphone 12', 'popular', 134)
