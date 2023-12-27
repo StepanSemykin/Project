@@ -37,3 +37,4 @@ chromedriver-win64/LICENSE.chromedriver
 .venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/__pycache__/_common.cpython-311.pyc
 .venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/abc.py
 .venv
+__pycache__/check.cpython-311.pyc

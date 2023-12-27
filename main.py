@@ -4,12 +4,13 @@ import os
 import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import (QApplication, QLabel, QComboBox,
+from PyQt5.QtWidgets import (QApplication, QLabel, QComboBox, QDialog,
                              QMainWindow, QPushButton, QFileDialog,
-                             QWidget, QLineEdit, QMessageBox)
-from WBparser import extract_data
+                             QWidget, QLineEdit, QMessageBox, QVBoxLayout)
+from check import check_key
 from save import serialize_data, convert_to_excel
 from statistic import draw_graphs
+from WBparser import extract_data
 
 SORT_METHODS = {0: 'popular', 1: 'rate', 2: 'priceup',
                 3: 'pricedown', 4: 'newly', 5: 'benefit'}
@@ -19,6 +20,29 @@ formatter = '[%(asctime)s: %(levelname)s] %(message)s'
 logging.basicConfig(level=logging.INFO, filename="main.log",
                     filemode="w", format=formatter)
 
+
+class KeyInputDialog(QDialog):
+    def __init__(self, parent=None):
+        super(KeyInputDialog, self).__init__(parent)
+
+        self.setWindowTitle('Введите ключ')
+        self.key_label = QLabel('Ключ:', self)
+        self.key_input = QLineEdit(self)
+        self.confirm_button = QPushButton('Подтвердить', self)
+        self.confirm_button.clicked.connect(self.check_key)
+        
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.key_label)
+        self.layout.addWidget(self.key_input)
+        self.layout.addWidget(self.confirm_button)
+        self.setLayout(self.layout)
+
+    def check_key(self):
+        self.entered_key = self.key_input.text().strip()
+        if check_key(self.entered_key):
+            self.accept()
+        else:
+            self.reject()
 
 class GraphicalInterface(QMainWindow):
     def __init__(self) -> None:
@@ -70,7 +94,13 @@ class GraphicalInterface(QMainWindow):
         self.start_parser.setGeometry(175, 350, 100, 40)
         self.start_parser.clicked.connect(self.start_program)
 
-        self.workerThread = None
+        self.show_key_input_dialog()
+
+    def show_key_input_dialog(self):
+        self.key_input_dialog = KeyInputDialog(self)
+        self.result = self.key_input_dialog.exec_()
+        if self.result != QDialog.Accepted:
+            self.close()
 
     def is_fill(self, name: str, quantity: str) -> bool:
         return True if name and quantity else False
